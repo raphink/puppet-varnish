@@ -34,7 +34,8 @@ Puppet::Type.type(:varnish_param).provide(:debian_systemd, :parent => AugeasProv
   end
 
   resource_path do |resource|
-    if flag = get_flag(resource) == '-p'
+    flag = get_flag(resource)
+    if flag == '-p'
       "#{base_path}/*[preceding-sibling::*[1]='#{flag}' and .=~regexp('#{resource[:name]}=.*')]"
     else
       "#{base_path}/*[preceding-sibling::*[1]='#{flag}']"

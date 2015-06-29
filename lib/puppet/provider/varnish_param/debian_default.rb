@@ -26,7 +26,8 @@ Puppet::Type.type(:varnish_param).provide(:debian_default, :parent => AugeasProv
   end
 
   resource_path do |resource|
-    if flag = get_flag(resource) == '-p'
+    flag = get_flag(resource)
+    if flag == '-p'
       "#{base_path}/value[preceding-sibling::value[1]='#{flag}' and .=~regexp('#{resource[:name]}=.*')]"
     else
       "#{base_path}/value[preceding-sibling::value[1]='#{flag}']"
