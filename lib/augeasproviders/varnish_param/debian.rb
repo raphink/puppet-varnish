@@ -60,7 +60,7 @@ module AugeasProviders
         # so we can reuse it for the systemd provider
         flag = get_flag(resource)
         if flag == '-p'
-          "#{base_path}/*[.='#{flag}' and following-sibling::value[1]=~regexp('#{resource[:name]}=.*')]"
+          "#{base_path}/*[.='#{flag}' and following-sibling::value[1]=~regexp('-.*')]"
         else
           "#{base_path}/*[.='#{flag}']"
         end
