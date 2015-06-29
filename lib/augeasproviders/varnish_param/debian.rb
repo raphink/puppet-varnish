@@ -58,7 +58,7 @@ module AugeasProviders
       def self.flag_path(resource)
         # Use * instead of value
         # so we can reuse it for the systemd provider
-        flag = self.class.get_flag(resource)
+        flag = get_flag(resource)
         if flag == '-p'
           "#{base_path}/*[.='#{flag}' and following-sibling::value[1]=~regexp('#{resource[:name]}=.*')]"
         else
