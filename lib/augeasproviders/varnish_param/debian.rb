@@ -155,10 +155,10 @@ module AugeasProviders
             aug.set(klass.resource_path(resource),
                     klass.format_value(aug, resource, nil))
           else
-            flag = aug.defvar(klass.flag_path(resource))
+            aug.defvar('flag', klass.flag_path(resource))
             aug.rm(klass.resource_path(resource))
             # Remove flag
-            aug.rm(flag)
+            aug.rm('$flag')
             # Remove entry if empty
             # keep generic so we can reuse it with systemd
             aug.rm("#{klass.base_path}[count(*[label()!='quote'])=0]")
