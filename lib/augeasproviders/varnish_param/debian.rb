@@ -98,6 +98,14 @@ module AugeasProviders
                   :value  => port,
                   :target => target
                 ) unless port.empty?
+              elsif cur_arg == '-p'
+                name, val = arg.split('=')
+                resources << new(
+                  :name   => name,
+                  :ensure => :present,
+                  :value  => val,
+                  :target => target
+                )
               else
                 variable = FLAGS.select { |f, v| v == cur_arg }.flatten[0]
                 resources << new(
