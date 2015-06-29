@@ -60,7 +60,7 @@ module AugeasProviders
         # so we can reuse it for the systemd provider
         flag = get_flag(resource)
         if flag == '-p'
-          "#{base_path}/*[.='#{flag}' and following-sibling::value[1]=~regexp('-.*')]"
+          "#{base_path}/*[.='#{flag}' and following-sibling::value[1]=~regexp('#{resource[:name]}=.*')]"
         else
           "#{base_path}/*[.='#{flag}']"
         end
@@ -155,9 +155,10 @@ module AugeasProviders
             aug.set(klass.resource_path(resource),
                     klass.format_value(aug, resource, nil))
           else
+            flag = aug.defvar(klass.flag_path(resource))
             aug.rm(klass.resource_path(resource))
             # Remove flag
-            aug.rm(klass.flag_path(resource))
+            aug.rm(flag)
             # Remove entry if empty
             # keep generic so we can reuse it with systemd
             aug.rm("#{klass.base_path}[count(*[label()!='quote'])=0]")
