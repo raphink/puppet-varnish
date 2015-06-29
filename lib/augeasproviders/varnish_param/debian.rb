@@ -146,7 +146,7 @@ module AugeasProviders
         augopen! do |aug|
           klass = self.class
           # Remove entry
-          if klass.format_value(aug, resource, nil)
+          if resource[:name] =~ /listen_/
             aug.set(klass.resource_path(resource),
                     klass.format_value(aug, resource, nil))
           else
