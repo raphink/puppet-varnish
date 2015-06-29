@@ -134,7 +134,7 @@ module AugeasProviders
           # Keep flag creation generic
           # so we can reuse it for the systemd provider
           flag = klass.get_flag(resource)
-          klass.create_flag(aug, flag, resource) if aug.match(flag_path(resource)).empty?
+          klass.create_flag(aug, flag, resource) if aug.match(klass.flag_path(resource)).empty?
           klass.create_resource(aug, resource)
         end
       end
