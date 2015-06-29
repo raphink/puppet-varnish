@@ -2,30 +2,34 @@ module AugeasProviders
   module VarnishParam
     class Debian < Puppet::Type.type(:augeasprovider).provider(:default)
       def self.parse_value(resource, value)
-        case resource[:name]
-        when 'listen_address', 'admin_listen_address'
+        if ['listen_address', 'admin_listen_address'].include? resource[:name]
           value.split(':')[0]
-        when 'listen_port', 'admin_listen_port'
+        elsif ['listen_port', 'admin_listen_port'].include? resource[:name]
           value.split(':')[1]
-        else
+        elsif FLAGS.has_key? resource[:name]
           value
+        else
+          # Parse for -p
+          value.split('=')[1]
         end 
       end
 
       def self.format_value(aug, resource, value)
-        case resource[:name]
-        when 'listen_address', 'admin_listen_address'
+        if ['listen_address', 'admin_listen_address'].include? resource[:name]
           full_entry = aug.get('$resource')
           listen_port = full_entry.nil? ? '' : full_entry.split(':')[1]
           # Return nil if none of the values is set
           "#{value}:#{listen_port}" if value && listen_port
-        when 'listen_port', 'admin_listen_port'
+        elsif ['listen_port', 'admin_listen_port'].include? resource[:name]
           full_entry = aug.get('$resource')
           listen_address = full_entry.nil? ? '' : full_entry.split(':')[0]
           # Return nil if none of the values is set
           "#{listen_address}:#{value}" if listen_address && value
-        else
+        elsif FLAGS.has_key? resource[:name]
           value
+        else
+          # Pass to -p
+          "#{resource[:name]}=#{value}"
         end 
       end
 
@@ -46,7 +50,8 @@ module AugeasProviders
         if FLAGS.has_key? resource[:name]
           FLAGS[resource[:name]]
         else
-          fail "Unknown varnish parameter '#{resource[:name]}'"
+          # Default to -p
+          '-p'
         end
       end
 
