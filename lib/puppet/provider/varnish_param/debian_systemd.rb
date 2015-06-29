@@ -24,7 +24,7 @@ Puppet::Type.type(:varnish_param).provide(:debian_systemd, :parent => AugeasProv
     "#{base_path}/#{num}"
   end
 
-  def self.create_flag(aug, flag)
+  def self.create_flag(aug, flag, resource)
     aug.set(next_arg(aug), flag)
   end
 
